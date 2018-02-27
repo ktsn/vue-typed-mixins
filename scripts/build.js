@@ -10,7 +10,7 @@ const banner = `/*!
  * ${pkg.homepage}
  *
  * @license
- * Copyright (c) 2017 ${pkg.author}
+ * Copyright (c) 2018 ${pkg.author}
  * Released under the MIT license
  * ${pkg.homepage}/blob/master/LICENSE
  */`
@@ -19,8 +19,12 @@ const baseConfig = {
   input: 'lib/index.js',
   output: {
     name: capitalize(pkg.name),
+    globals: {
+      vue: 'Vue'
+    },
     banner
   },
+  external: ['vue'],
   plugins: []
 }
 
