@@ -1,0 +1,61 @@
+{
+  "name": "vue-typed-mixins",
+  "version": "0.0.0",
+  "author": "katashin",
+  "description": "Type safe Vue.js mixins",
+  "keywords": [
+    "Vue.js",
+    "TypeScript",
+    "mixins",
+    "type safety"
+  ],
+  "license": "MIT",
+  "main": "dist/vue-typed-mixins.cjs.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "homepage": "https://github.com/ktsn/vue-typed-mixins",
+  "bugs": "https://github.com/ktsn/vue-typed-mixins/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ktsn/vue-typed-mixins.git"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run test && npm run clean && npm run build",
+    "clean": "rm -rf lib dist .tmp",
+    "dev": "run-p watch:test testem",
+    "build": "npm run build:ts && npm run build:rollup",
+    "build:ts": "tsc -p src",
+    "build:rollup": "node scripts/build.js",
+    "watch:test": "webpack --watch --config scripts/webpack.config.test.js",
+    "lint": "tslint -p . && prettier --list-different \"{src,scripts,test}/**/*.{js,ts}\"",
+    "format": "prettier --write \"{src,scripts,test}/**/*.{js,ts}\"",
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "webpack --config scripts/webpack.config.test.js && testem ci --launch PhantomJS",
+    "testem": "testem"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.48",
+    "@types/power-assert": "1.4.29",
+    "glob": "^7.1.2",
+    "npm-run-all": "^4.1.2",
+    "power-assert": "^1.4.4",
+    "prettier": "1.11.0",
+    "rollup": "^0.56.3",
+    "rollup-plugin-replace": "^2.0.0",
+    "testem": "^2.0.0",
+    "ts-loader": "^4.0.0",
+    "tslint": "^5.9.1",
+    "tslint-config-ktsn": "^2.1.0",
+    "tslint-config-prettier": "^1.9.0",
+    "typescript": "^2.7.2",
+    "uglify-js": "^3.3.12",
+    "vue": "^2.5.13",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9",
+    "webpack-espower-loader": "^2.0.0"
+  }
+}
