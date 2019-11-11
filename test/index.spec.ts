@@ -1,5 +1,5 @@
 import * as assert from 'power-assert'
-import Vue from 'vue'
+import Vue, { ComponentOptions } from 'vue'
 import mixins from '../src/index'
 
 Vue.config.productionTip = false
@@ -22,6 +22,48 @@ describe('mixins', () => {
         }
       }
     })
+
+    const App = mixins(Foo, Bar).extend({
+      data() {
+        return {
+          value: true
+        }
+      },
+
+      computed: {
+        concat(): string {
+          return `${this.foo} ${this.bar} ${this.value}`
+        }
+      }
+    })
+
+    const vm = new App()
+    assert(vm.foo === 'test')
+    assert(vm.bar === 123)
+    assert(vm.value === true)
+    assert(vm.concat === 'test 123 true')
+  })
+
+  it('allow component options object mixins', () => {
+    const Foo = Vue.extend({
+      data() {
+        return {
+          foo: 'test'
+        }
+      }
+    })
+
+    interface BarInstance extends Vue {
+      bar: number
+    }
+
+    const Bar: ComponentOptions<BarInstance> = {
+      data() {
+        return {
+          bar: 123
+        }
+      }
+    }
 
     const App = mixins(Foo, Bar).extend({
       data() {

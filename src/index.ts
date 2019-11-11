@@ -1,6 +1,6 @@
-import Vue, { VueConstructor } from 'vue'
+import Vue, { VueConstructor, ComponentOptions } from 'vue'
 
-export type VueClass<T> = VueConstructor<T & Vue>
+type VueMixin = VueConstructor | ComponentOptions<never>
 
 type UnionToIntersection<U> = (U extends any
 ? (k: U) => void
@@ -8,15 +8,21 @@ type UnionToIntersection<U> = (U extends any
   ? I
   : never
 
-export type MixedVueConstructor<
-  Ctors extends VueConstructor[]
-> = Ctors extends VueConstructor<infer Vs>[]
-  ? VueClass<UnionToIntersection<Vs>>
+type ExtractInstance<T> = T extends VueConstructor<infer V>
+  ? V
+  : T extends ComponentOptions<infer V>
+  ? V
   : never
 
-export default function mixins<Ctors extends VueConstructor[]>(
-  ...Ctors: Ctors
-): MixedVueConstructor<Ctors>
-export default function mixins(...Ctors: VueConstructor[]): VueConstructor {
-  return Vue.extend({ mixins: Ctors })
+type MixedVueConstructor<Mixins extends VueMixin[]> = Mixins extends (infer T)[]
+  ? VueConstructor<UnionToIntersection<ExtractInstance<T>> & Vue>
+  : never
+
+export default function mixins<Mixins extends VueMixin[]>(
+  ...mixins: Mixins
+): MixedVueConstructor<Mixins>
+export default function mixins(
+  ...mixins: (VueConstructor | ComponentOptions<Vue>)[]
+): VueConstructor {
+  return Vue.extend({ mixins })
 }
